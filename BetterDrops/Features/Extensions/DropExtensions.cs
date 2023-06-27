@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Configs;
     using Features.Components;
+    using MEC;
     using PlayerRoles;
     using PluginAPI.Core;
     using UnityEngine;
@@ -13,14 +14,17 @@
     {
         public static void SpawnDrops(this Team team, DropConfig config, uint numberOfDrops)
         {
-            for(int i = 0; i < numberOfDrops; i++)
-                team.SpawnDrop(config);
+            Timing.CallDelayed(20f, () => {
+                for (int i = 0; i < numberOfDrops; i++)
+                    team.SpawnDrop(config);
 
-            if (!string.IsNullOrEmpty(config.Cassie))
-            {
-                if (team == Team.ChaosInsurgency) Cassie.Message(config.Cassie, false, config.CassieBell);
-                else Cassie.Message(config.Cassie, false, config.CassieBell);
-            }
+                if (!string.IsNullOrEmpty(config.Cassie))
+                {
+                    if (team == Team.ChaosInsurgency) Cassie.Message( "空投补给已经送达"+"<size=0>"+config.Cassie+"</size>", false, config.CassieBell);
+                    else Cassie.Message("空投补给已经送达" + "<size=0>" + config.Cassie + "</size>", false, config.CassieBell);
+                }
+            });
+
         }
 
         private static void SpawnDrop(this Team team, DropConfig config)
